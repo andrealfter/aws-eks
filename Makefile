@@ -94,12 +94,9 @@ cost-estimate: ## Estimate monthly AWS costs
 		echo "- EKS Cluster: ~$$73/month" && \
 		echo "- EC2 Instances (6x m6i.large): ~$$410/month" && \
 		echo "- EC2 Spot Instances (3x m6i.large): ~$$60/month" && \
-		echo "- Aurora PostgreSQL: ~$$350/month" && \
-		echo "- ElastiCache Redis: ~$$450/month" && \
 		echo "- NAT Gateways (3x): ~$$135/month" && \
 		echo "- Load Balancer: ~$$25/month" && \
-		echo "- CloudFront: ~$$50/month" && \
-		echo "- Storage & Backups: ~$$100/month" && \
+		echo "- S3 Storage: ~$$50/month" && \
 		echo "--------------------------------" && \
-		echo "Total Estimated: ~$$1,653/month" && \
+		echo "Total Estimated: ~$$753/month" && \
 		echo "\nNote: Actual costs may vary based on usage"

@@ -5,8 +5,8 @@ availability_zones = ["us-east-1a", "us-east-1b", "us-east-1c"]
 # Project Configuration
 project_name = "aws-eks-app"
 environment  = "production"
-domain_name  = "example.com"
-alert_email  = "alerts@example.com"
+domain_name  = "av360.io"
+alert_email  = "andre.alfter@bechtle.com"
 
 # Network Configuration
 vpc_cidr = "10.0.0.0/16"
@@ -25,13 +25,6 @@ spot_instance_types          = ["m6i.large", "m6i.xlarge", "m6a.large", "m6a.xla
 spot_node_group_min_size     = 0
 spot_node_group_max_size     = 10
 spot_node_group_desired_size = 3
-
-# Database Configuration
-aurora_instance_class        = "db.r6g.large"
-aurora_reader_instance_class = "db.t4g.medium"
-
-# Cache Configuration
-redis_node_type = "cache.r7g.large"
 
 # Tags
 tags = {

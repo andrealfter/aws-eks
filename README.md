@@ -7,12 +7,9 @@ This repository contains a production-ready AWS infrastructure deployment using 
 ### Core Components
 
 - **Amazon EKS**: Kubernetes orchestration platform with mixed On-Demand/Spot instances
-- **Amazon Aurora PostgreSQL**: Primary relational database with Multi-AZ deployment
-- **Amazon ElastiCache Redis**: In-memory caching layer with cluster mode enabled
 - **Amazon S3**: Static content storage with lifecycle policies
 - **Application Load Balancer**: Internet-facing load balancer with SSL termination
-- **Amazon CloudFront**: Global CDN with AWS WAF integration
-- **Amazon EFS**: Shared persistent storage for containers
+- **VPC**: Multi-AZ networking with public/private subnets
 
 ### Security Features
 
@@ -27,9 +24,8 @@ This repository contains a production-ready AWS infrastructure deployment using 
 
 - **Multi-AZ Deployment**: Resources distributed across 3 availability zones
 - **Auto-scaling**: Horizontal scaling for EKS nodes and pods
-- **Database Replication**: Aurora with 2 read replicas
-- **Cache Redundancy**: Redis with 3 shards and 2 replicas per shard
-- **Backup Strategy**: Automated backups with point-in-time recovery
+- **Redundant NAT Gateways**: One per availability zone for outbound connectivity
+- **S3 Cross-Region Replication**: Optional for disaster recovery
 
 ## Prerequisites
 

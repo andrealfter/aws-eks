@@ -94,7 +94,7 @@ resource "aws_eks_node_group" "main" {
   disk_size = var.node_disk_size
 
   remote_access {
-    ec2_ssh_key = var.ec2_ssh_key
+    ec2_ssh_key               = var.ec2_ssh_key
     source_security_group_ids = var.ssh_access_security_group_ids
   }
 
@@ -161,7 +161,7 @@ resource "aws_eks_node_group" "spot" {
     NodeType    = "spot"
   }
 
-  taints {
+  taint {
     key    = "spot"
     value  = "true"
     effect = "NO_SCHEDULE"
@@ -319,20 +319,20 @@ resource "aws_launch_template" "eks_nodes_spot" {
 }
 
 resource "aws_eks_addon" "vpc_cni" {
-  cluster_name             = aws_eks_cluster.main.name
-  addon_name               = "vpc-cni"
-  addon_version            = var.vpc_cni_version
-  resolve_conflicts        = "OVERWRITE"
-  service_account_role_arn = var.vpc_cni_role_arn
+  cluster_name                = aws_eks_cluster.main.name
+  addon_name                  = "vpc-cni"
+  addon_version               = var.vpc_cni_version
+  resolve_conflicts_on_update = "OVERWRITE"
+  service_account_role_arn    = var.vpc_cni_role_arn
 
   tags = var.tags
 }
 
 resource "aws_eks_addon" "coredns" {
-  cluster_name      = aws_eks_cluster.main.name
-  addon_name        = "coredns"
-  addon_version     = var.coredns_version
-  resolve_conflicts = "OVERWRITE"
+  cluster_name                = aws_eks_cluster.main.name
+  addon_name                  = "coredns"
+  addon_version               = var.coredns_version
+  resolve_conflicts_on_update = "OVERWRITE"
 
   tags = var.tags
 
@@ -340,20 +340,20 @@ resource "aws_eks_addon" "coredns" {
 }
 
 resource "aws_eks_addon" "kube_proxy" {
-  cluster_name      = aws_eks_cluster.main.name
-  addon_name        = "kube-proxy"
-  addon_version     = var.kube_proxy_version
-  resolve_conflicts = "OVERWRITE"
+  cluster_name                = aws_eks_cluster.main.name
+  addon_name                  = "kube-proxy"
+  addon_version               = var.kube_proxy_version
+  resolve_conflicts_on_update = "OVERWRITE"
 
   tags = var.tags
 }
 
 resource "aws_eks_addon" "ebs_csi_driver" {
-  cluster_name             = aws_eks_cluster.main.name
-  addon_name               = "aws-ebs-csi-driver"
-  addon_version            = var.ebs_csi_driver_version
-  resolve_conflicts        = "OVERWRITE"
-  service_account_role_arn = var.ebs_csi_driver_role_arn
+  cluster_name                = aws_eks_cluster.main.name
+  addon_name                  = "aws-ebs-csi-driver"
+  addon_version               = var.ebs_csi_driver_version
+  resolve_conflicts_on_update = "OVERWRITE"
+  service_account_role_arn    = var.ebs_csi_driver_role_arn
 
   tags = var.tags
 }
@@ -361,11 +361,11 @@ resource "aws_eks_addon" "ebs_csi_driver" {
 resource "aws_eks_addon" "efs_csi_driver" {
   count = var.enable_efs_csi_driver ? 1 : 0
 
-  cluster_name             = aws_eks_cluster.main.name
-  addon_name               = "aws-efs-csi-driver"
-  addon_version            = var.efs_csi_driver_version
-  resolve_conflicts        = "OVERWRITE"
-  service_account_role_arn = var.efs_csi_driver_role_arn
+  cluster_name                = aws_eks_cluster.main.name
+  addon_name                  = "aws-efs-csi-driver"
+  addon_version               = var.efs_csi_driver_version
+  resolve_conflicts_on_update = "OVERWRITE"
+  service_account_role_arn    = var.efs_csi_driver_role_arn
 
   tags = var.tags
 }

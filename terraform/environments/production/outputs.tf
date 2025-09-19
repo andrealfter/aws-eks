@@ -16,25 +16,7 @@ output "eks_cluster_certificate_authority_data" {
   sensitive = true
 }
 
-output "aurora_cluster_endpoint" {
-  value = module.rds.cluster_endpoint
-}
 
-output "aurora_reader_endpoint" {
-  value = module.rds.cluster_reader_endpoint
-}
-
-output "aurora_secret_arn" {
-  value = module.rds.secret_arn
-}
-
-output "redis_configuration_endpoint" {
-  value = module.elasticache.configuration_endpoint
-}
-
-output "redis_secret_arn" {
-  value = module.elasticache.secret_arn
-}
 
 output "alb_dns_name" {
   value = aws_lb.main.dns_name

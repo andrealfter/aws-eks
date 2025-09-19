@@ -114,7 +114,7 @@ data "aws_iam_policy_document" "eks_node_custom" {
     condition {
       test     = "StringEquals"
       variable = "kms:ViaService"
-      values   = [
+      values = [
         "secretsmanager.${var.region}.amazonaws.com",
         "s3.${var.region}.amazonaws.com"
       ]

@@ -64,6 +64,8 @@ resource "aws_s3_bucket_lifecycle_configuration" "static_content" {
     id     = "transition-to-ia"
     status = "Enabled"
 
+    filter {}
+
     transition {
       days          = 30
       storage_class = "STANDARD_IA"
@@ -92,6 +94,8 @@ resource "aws_s3_bucket_lifecycle_configuration" "static_content" {
   rule {
     id     = "delete-incomplete-multipart-uploads"
     status = "Enabled"
+
+    filter {}
 
     abort_incomplete_multipart_upload {
       days_after_initiation = 7
@@ -205,6 +209,8 @@ resource "aws_s3_bucket_lifecycle_configuration" "alb_logs" {
     id     = "delete-old-logs"
     status = "Enabled"
 
+    filter {}
+
     expiration {
       days = var.alb_logs_retention_days
     }
@@ -248,6 +254,8 @@ resource "aws_s3_bucket_lifecycle_configuration" "cloudfront_logs" {
   rule {
     id     = "delete-old-logs"
     status = "Enabled"
+
+    filter {}
 
     expiration {
       days = var.cloudfront_logs_retention_days
@@ -317,6 +325,8 @@ resource "aws_s3_bucket_lifecycle_configuration" "backups" {
   rule {
     id     = "transition-old-backups"
     status = "Enabled"
+
+    filter {}
 
     transition {
       days          = 30

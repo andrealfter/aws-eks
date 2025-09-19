@@ -40,7 +40,7 @@ provider "kubernetes" {
   exec {
     api_version = "client.authentication.k8s.io/v1beta1"
     command     = "aws"
-    args = ["eks", "get-token", "--cluster-name", module.eks.cluster_name]
+    args        = ["eks", "get-token", "--cluster-name", module.eks.cluster_name]
   }
 }
 
@@ -52,7 +52,7 @@ provider "helm" {
     exec {
       api_version = "client.authentication.k8s.io/v1beta1"
       command     = "aws"
-      args = ["eks", "get-token", "--cluster-name", module.eks.cluster_name]
+      args        = ["eks", "get-token", "--cluster-name", module.eks.cluster_name]
     }
   }
 }
@@ -97,68 +97,38 @@ module "iam" {
   oidc_provider_arn          = module.eks.oidc_provider_arn
   create_alb_controller_role = true
   create_ebs_csi_driver_role = true
-  create_efs_csi_driver_role = true
+  create_efs_csi_driver_role = false
   tags                       = local.tags
 }
 
 module "eks" {
   source = "../../modules/eks"
 
-  name                          = local.name
-  kubernetes_version            = var.kubernetes_version
-  cluster_role_arn              = module.iam.eks_cluster_role_arn
-  node_role_arn                 = module.iam.eks_node_role_name
-  subnet_ids                    = module.vpc.private_subnet_ids
-  node_subnet_ids               = module.vpc.private_subnet_ids
-  cluster_security_group_id     = module.security.eks_cluster_security_group_id
-  node_security_group_id        = module.security.eks_nodes_security_group_id
+  name                           = local.name
+  kubernetes_version             = var.kubernetes_version
+  cluster_role_arn               = module.iam.eks_cluster_role_arn
+  node_role_arn                  = module.iam.eks_node_role_name
+  subnet_ids                     = module.vpc.private_subnet_ids
+  node_subnet_ids                = module.vpc.private_subnet_ids
+  cluster_security_group_id      = module.security.eks_cluster_security_group_id
+  node_security_group_id         = module.security.eks_nodes_security_group_id
   cluster_endpoint_public_access = false
-  node_instance_types           = var.node_instance_types
-  node_group_min_size           = var.node_group_min_size
-  node_group_max_size           = var.node_group_max_size
-  node_group_desired_size       = var.node_group_desired_size
-  enable_spot_instances         = true
-  spot_instance_types           = var.spot_instance_types
-  spot_node_group_min_size      = var.spot_node_group_min_size
-  spot_node_group_max_size      = var.spot_node_group_max_size
-  spot_node_group_desired_size  = var.spot_node_group_desired_size
-  ebs_csi_driver_role_arn       = module.iam.ebs_csi_driver_role_arn
-  efs_csi_driver_role_arn       = module.iam.efs_csi_driver_role_arn
-  environment                   = var.environment
-  tags                          = local.tags
+  node_instance_types            = var.node_instance_types
+  node_group_min_size            = var.node_group_min_size
+  node_group_max_size            = var.node_group_max_size
+  node_group_desired_size        = var.node_group_desired_size
+  enable_spot_instances          = true
+  spot_instance_types            = var.spot_instance_types
+  spot_node_group_min_size       = var.spot_node_group_min_size
+  spot_node_group_max_size       = var.spot_node_group_max_size
+  spot_node_group_desired_size   = var.spot_node_group_desired_size
+  ebs_csi_driver_role_arn        = module.iam.ebs_csi_driver_role_arn
+  enable_efs_csi_driver          = false
+  environment                    = var.environment
+  tags                           = local.tags
 }
 
-module "rds" {
-  source = "../../modules/rds"
 
-  name                     = local.name
-  region                   = var.region
-  database_subnet_ids      = module.vpc.database_subnet_ids
-  security_group_id        = module.security.rds_security_group_id
-  engine_version           = "15.4"
-  database_name            = "appdb"
-  master_username          = "postgres"
-  instance_class           = var.aurora_instance_class
-  reader_instance_class    = var.aurora_reader_instance_class
-  reader_count             = 2
-  monitoring_role_arn      = module.iam.rds_enhanced_monitoring_role_arn
-  deletion_protection      = true
-  skip_final_snapshot      = false
-  tags                     = local.tags
-}
-
-module "elasticache" {
-  source = "../../modules/elasticache"
-
-  name                    = local.name
-  subnet_ids              = module.vpc.database_subnet_ids
-  security_group_id       = module.security.elasticache_security_group_id
-  engine_version          = "7.1"
-  node_type               = var.redis_node_type
-  num_node_groups         = 3
-  replicas_per_node_group = 2
-  tags                    = local.tags
-}
 
 module "s3" {
   source = "../../modules/s3"
@@ -168,31 +138,7 @@ module "s3" {
   tags                 = local.tags
 }
 
-module "efs" {
-  source = "aws-modules/efs/aws"
-  version = "~> 1.0"
 
-  name = local.name
-
-  mount_targets = [
-    for idx, subnet_id in module.vpc.private_subnet_ids : {
-      subnet_id       = subnet_id
-      security_groups = [module.security.efs_security_group_id]
-    }
-  ]
-
-  lifecycle_policy = {
-    transition_to_ia                    = "AFTER_30_DAYS"
-    transition_to_primary_storage_class = "AFTER_1_ACCESS"
-  }
-
-  enable_backup_policy = true
-  encrypted            = true
-  performance_mode     = "elasticThroughput"
-  throughput_mode      = "elastic"
-
-  tags = local.tags
-}
 
 resource "aws_lb" "main" {
   name               = "${local.name}-alb"
@@ -201,8 +147,8 @@ resource "aws_lb" "main" {
   security_groups    = [module.security.alb_security_group_id]
   subnets            = module.vpc.public_subnet_ids
 
-  enable_deletion_protection = true
-  enable_http2               = true
+  enable_deletion_protection       = true
+  enable_http2                     = true
   enable_cross_zone_load_balancing = true
 
   access_logs {

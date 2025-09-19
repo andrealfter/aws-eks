@@ -94,23 +94,7 @@ variable "spot_node_group_desired_size" {
   default     = 3
 }
 
-variable "aurora_instance_class" {
-  description = "Instance class for Aurora"
-  type        = string
-  default     = "db.r6g.large"
-}
 
-variable "aurora_reader_instance_class" {
-  description = "Instance class for Aurora read replicas"
-  type        = string
-  default     = "db.t4g.medium"
-}
-
-variable "redis_node_type" {
-  description = "Node type for ElastiCache Redis"
-  type        = string
-  default     = "cache.r7g.large"
-}
 
 variable "tags" {
   description = "Common tags for all resources"

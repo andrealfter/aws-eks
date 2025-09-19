@@ -98,11 +98,11 @@ resource "aws_security_group" "eks_nodes" {
   description = "Security group for EKS worker nodes"
 
   ingress {
-    description     = "Allow nodes to communicate with each other"
-    from_port       = 0
-    to_port         = 65535
-    protocol        = "-1"
-    self            = true
+    description = "Allow nodes to communicate with each other"
+    from_port   = 0
+    to_port     = 65535
+    protocol    = "-1"
+    self        = true
   }
 
   ingress {
@@ -140,8 +140,8 @@ resource "aws_security_group" "eks_nodes" {
   tags = merge(
     var.tags,
     {
-      Name = "${var.name}-eks-nodes-sg"
-      Type = "eks-nodes"
+      Name                                = "${var.name}-eks-nodes-sg"
+      Type                                = "eks-nodes"
       "kubernetes.io/cluster/${var.name}" = "owned"
     }
   )
